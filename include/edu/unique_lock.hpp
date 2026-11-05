@@ -84,7 +84,7 @@ namespace edu {
 		}
 
 		void check_is_not_owns() const {
-			if (owns_) {
+			if (!owns_) {
 				throw std::system_error{
 					std::make_error_code(std::errc::operation_not_permitted)
 				};
