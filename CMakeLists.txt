@@ -13,10 +13,5 @@ target_include_directories(edu INTERFACE
 include(CTest)
 
 if(BUILD_TESTING)
-    add_library(doctest INTERFACE)
-    add_library(doctest::doctest ALIAS doctest)
-
-    target_include_directories(doctest SYSTEM INTERFACE
-        "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty"
-    )
+    add_subdirectory(tests)
 endif()

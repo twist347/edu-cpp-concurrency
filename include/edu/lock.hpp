@@ -4,8 +4,8 @@
 #include <thread>
 
 namespace edu::detail {
-    template<typename L1, typename ... Ln>
-    bool try_lock_all(L1 &l1, Ln & ... ln) {
+    template<typename L1, typename... Ln>
+    bool try_lock_all(L1 &l1, Ln &... ln) {
         std::unique_lock lk{l1, std::try_to_lock};
 
         if (!lk.owns_lock()) {
@@ -24,8 +24,8 @@ namespace edu::detail {
 }
 
 namespace edu {
-    template<typename Lockable1, typename Lockable2, typename ... LockableN>
-    void lock(Lockable1 &lock1, Lockable2 &lock2, LockableN & ... lockn) {
+    template<typename Lockable1, typename Lockable2, typename... LockableN>
+    void lock(Lockable1 &lock1, Lockable2 &lock2, LockableN &... lockn) {
         while (true) {
             {
                 std::unique_lock lead{lock1};

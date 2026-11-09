@@ -6,14 +6,14 @@
 #include "lock_tags.hpp"
 
 namespace edu {
-    template<typename ... MutexTypes>
+    template<typename... MutexTypes>
     class scoped_lock {
     public:
-        explicit scoped_lock(MutexTypes & ... ms) : ms_{ms...} {
+        explicit scoped_lock(MutexTypes &... ms) : ms_{ms...} {
             edu::lock(ms...);
         }
 
-        scoped_lock(adopt_lock_t, MutexTypes & ... ms) noexcept : ms_{ms...} {}
+        scoped_lock(adopt_lock_t, MutexTypes &... ms) noexcept : ms_{ms...} {}
 
         scoped_lock(const scoped_lock &) = delete;
         scoped_lock &operator=(const scoped_lock &) = delete;
@@ -22,11 +22,11 @@ namespace edu {
         scoped_lock &operator=(scoped_lock &&) noexcept = delete;
 
         ~scoped_lock() {
-            std::apply([](MutexTypes & ... ms) { (ms.unlock(), ...); }, ms_);
+            std::apply([](MutexTypes &... ms) { (ms.unlock(), ...); }, ms_);
         }
 
     private:
-        std::tuple<MutexTypes & ...> ms_;
+        std::tuple<MutexTypes &...> ms_;
     };
 
     template<typename Mutex>
@@ -69,6 +69,6 @@ namespace edu {
         ~scoped_lock() = default;
     };
 
-    template<typename ... MutexTypes>
+    template<typename... MutexTypes>
     scoped_lock(MutexTypes &...) -> scoped_lock<MutexTypes...>;
 }

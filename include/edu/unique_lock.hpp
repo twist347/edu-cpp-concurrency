@@ -66,6 +66,28 @@ namespace edu {
 			owns_ = false;
 		}
 
+		bool owns_lock() const noexcept {
+		    return owns_;
+		}
+
+		explicit operator bool() const noexcept {
+		    return owns_;
+		}
+
+		mutex_type *release() noexcept {
+		    owns_ = false;
+			return std::exchange(mutex_, nullptr);
+		}
+
+		mutex_type *mutex() const noexcept {
+		    return mutex_;
+		}
+
+		void swap(unique_lock &other) noexcept {
+		    std::swap(mutex_, other.mutex_);
+		    std::swap(owns_, other.owns_);
+		}
+
 	private:
 		void check_is_m() const {
 			if (!mutex_) {
@@ -94,4 +116,9 @@ namespace edu {
 		mutex_type *mutex_ = nullptr;
 		bool owns_ = false;
 	};
+
+	template<typename Mutex>
+	void swap(unique_lock<Mutex> &lhs, unique_lock<Mutex> &rhs) noexcept {
+	    lhs.swap(rhs);
+	}
 };
